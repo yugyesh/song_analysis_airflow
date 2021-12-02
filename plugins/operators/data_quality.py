@@ -13,9 +13,10 @@ class DataQualityOperator(BaseOperator):
         redshift_conn_id="",
         fact_table="",
         dim_tables=[],
-        staging_table="",
-        check_table="",
-        check_column="",
+        # staging_table="",
+        # staging_column="",
+        # check_table="",
+        # check_column="",
         *args,
         **kwargs,
     ):
@@ -23,9 +24,10 @@ class DataQualityOperator(BaseOperator):
         self.redshift_conn_id = redshift_conn_id
         self.fact_table = fact_table
         self.dim_tables = dim_tables
-        self.check_table = check_table
-        self.check_column = check_column
-        self.staging_table = staging_table
+        # self.check_table = check_table
+        # self.check_column = check_column
+        # self.staging_table = staging_table
+        # self.staging_column = staging_column
 
     def execute(self, context):
         redshift_hook = PostgresHook(self.redshift_conn_id)
@@ -49,16 +51,16 @@ class DataQualityOperator(BaseOperator):
 
         # Check that all of the data are loaded
         # e.g. check that all of the users are loaded
-        if self.check_column != "" and self.check_table != "":
-            count_data_in_staging = redshift_hook.get_records(
-                f"SELECT count({self.check_column}) FROM {self.staging_table}"
-            )
+        # if self.check_column != "" and self.check_table != "":
+        #     count_data_in_staging = redshift_hook.get_records(
+        #         f"SELECT count({self.check_column}) FROM {self.staging_column}"
+        #     )
 
-            count_data_in_dim = redshift_hook.get_records(
-                f"SELECT COUNT({self.check_column} FROM {self.check_table})"
-            )
+        #     count_data_in_dim = redshift_hook.get_records(
+        #         f"SELECT COUNT({self.check_column} FROM {self.check_table})"
+        #     )
 
-            if count_data_in_dim == count_data_in_staging:
-                self.log.info(f"Data has been loaded correctly {self.check_table}")
-            else:
-                self.log.error(f"Data were lost while loading {self.check_table}")
+        #     if count_data_in_dim == count_data_in_staging:
+        #         self.log.info(f"Data has been loaded correctly {self.check_table}")
+        #     else:
+        #         self.log.error(f"Data were lost while loading {self.check_table}")

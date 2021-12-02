@@ -3,6 +3,8 @@ import os
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.postgres_operator import PostgresOperator
+from airflow.models import Variable
+
 
 from operators import (
     StageToRedshiftOperator,
@@ -48,6 +50,7 @@ stage_events_to_redshift = StageToRedshiftOperator(
     table="staging_events",
     s3_bucket="udacity-dend",
     s3_key="log_data",
+    format_type=Variable.get("json_format"),
 )
 
 stage_songs_to_redshift = StageToRedshiftOperator(
@@ -55,9 +58,10 @@ stage_songs_to_redshift = StageToRedshiftOperator(
     dag=dag,
     redshift_conn_id="redshift",
     aws_credential_id="aws_credentials",
-    table="staging_events",
+    table="staging_songs",
     s3_bucket="udacity-dend",
     s3_key="song_data/A/A",
+    format_type="auto",
 )
 
 # load_songplays_table = LoadFactOperator(task_id="load_songplays_fact_table", dag=dag)
@@ -117,9 +121,10 @@ run_quality_checks = DataQualityOperator(
     redshift_conn_id="redshift",
     fact_table="songplays",
     dim_tables=["artists", "users", "time", "songs"],
-    staging_table="staging_songs",
-    check_table="users",
-    check_column="userid",
+    # staging_table="staging_songs",
+    # staging_column="userid"
+    # check_table="users",
+    # check_column="userid",
 )
 
 end_operator = DummyOperator(task_id="stop_execution", dag=dag)
