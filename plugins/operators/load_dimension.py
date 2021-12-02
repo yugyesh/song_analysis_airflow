@@ -21,6 +21,7 @@ class LoadDimensionOperator(BaseOperator):
         table_name="",
         column_names="",
         selecting_query="",
+        is_appending=False,
         *args,
         **kwargs,
     ):
@@ -28,18 +29,24 @@ class LoadDimensionOperator(BaseOperator):
         super(LoadDimensionOperator, self).__init__(*args, **kwargs)
         self.redshift_conn_id = redshift_conn_id
         self.selecting_query = selecting_query
-        self.table_name = (table_name,)
+        self.table_name = table_name
         self.column_names = column_names
+        self.is_appending = is_appending
 
     def execute(self, context):
+        """This operator allows task to insert data from the staging tables
+
+        Args:
+            context (context): context of the operator
+        """
         self.log.info(f"Loading data to the dimension table {self.table_name}")
 
         redshift_hook = PostgresHook(postgres_conn_id=self.redshift_conn_id)
 
-        self.log.info(f"Clearing data from {self.table_name} table")
-
         # try:
-        redshift_hook.run("DELETE FROM {}".format(self.table_name))
+        if self.is_appending is False:
+            self.log.info(f"Clearing data from {self.table_name} table")
+            redshift_hook.run("DELETE FROM {}".format(self.table_name))
         # except Exception as error:
         #     self.log.error(
         #         f"Error while clearing data from {self.table_name} table with error:{error}"
