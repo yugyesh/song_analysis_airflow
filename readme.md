@@ -64,7 +64,9 @@ This operator validates the data loaded to the facts and dimension table
 ## Generated DAG
 
 - Graph view
-    <img src="./images/graph_view.png" width="500">
+  
+  <img src="./images/graph_view.png" width="500">
 
 - Tree view
-    <img src="./images/tree_view.png" width="500">
+  
+  <img src="./images/tree_view.png" width="500">
