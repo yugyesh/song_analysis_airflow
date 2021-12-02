@@ -41,7 +41,7 @@ class StageToRedshiftOperator(BaseOperator):
 
     def execute(self, context):
         """
-        This method copy's data from the s3 to redshift staging table
+        This operator copy's data from the s3 to redshift staging table
         Args:
             context (context): context of the operator
         """
