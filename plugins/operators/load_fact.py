@@ -41,7 +41,7 @@ class LoadFactOperator(BaseOperator):
         redshift_hook = PostgresHook(postgres_conn_id=self.redshift_conn_id)
 
         self.log.info(f"Clearing data from {self.table_name} table")
-        redshift_hook.run("DELETE FROM {}".format(self.table_name))
+        redshift_hook.run("TRUNCATE FROM {}".format(self.table_name))
 
         self.log.info(f"Inserting data into the {self.table_name}")  # try:
         formated_query = LoadFactOperator.loading_query.format(

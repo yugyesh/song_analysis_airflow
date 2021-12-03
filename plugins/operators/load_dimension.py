@@ -46,7 +46,7 @@ class LoadDimensionOperator(BaseOperator):
         # try:
         if self.is_appending is False:
             self.log.info(f"Clearing data from {self.table_name} table")
-            redshift_hook.run("DELETE FROM {}".format(self.table_name))
+            redshift_hook.run("TRUNCATE FROM {}".format(self.table_name))
         # except Exception as error:
         #     self.log.error(
         #         f"Error while clearing data from {self.table_name} table with error:{error}"

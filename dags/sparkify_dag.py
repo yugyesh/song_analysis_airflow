@@ -19,7 +19,7 @@ default_args = {
     "owner": "sparkify",
     "depends_on_past": False,
     "start_date": datetime(2019, 1, 12),
-    "retries": 1,
+    "retries": 3,
     "retries_delay": timedelta(minutes=5),
     "catchup": False,
 }
